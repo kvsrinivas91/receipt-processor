@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReceiptService {
@@ -21,24 +22,31 @@ public class ReceiptService {
 
     public String save(Receipt receipt){
 
-        int points = calculatePoints(receipt);
+        try{
+            int points = calculatePoints(receipt);
 
-        Receipt toSave =
-            Receipt.builder()
-                .id(receipt.getId())
-                .items(receipt.getItems())
-                    .points(points)
-                .build();
-        Receipt savedReceipt = receiptRepository.save(toSave);
+            Receipt toSave =
+                    Receipt.builder()
+                            .id(receipt.getId())
+                            .items(receipt.getItems())
+                            .points(points)
+                            .build();
+            Receipt savedReceipt = receiptRepository.save(toSave);
 
-        List<Item> items = receipt.getItems().stream()
-                .peek(item -> item.setReceipt(savedReceipt)).toList();
+            List<Item> items = receipt.getItems().stream()
+                    .peek(item -> item.setReceipt(savedReceipt)).toList();
 
 
 
-        itemRepository.saveAll(items);
+            itemRepository.saveAll(items);
+            return savedReceipt.getId();
+        }
+        catch (Exception e){
+            throw e;
+        }
 
-        return savedReceipt.getId();
+
+
     }
 
     public int getPoints(String id){
@@ -103,4 +111,7 @@ public class ReceiptService {
         return points;
     }
 
+    public Optional<Receipt> findById(String id) {
+        return receiptRepository.findById(id);
+    }
 }
