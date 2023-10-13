@@ -8,7 +8,6 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

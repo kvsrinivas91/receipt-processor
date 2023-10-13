@@ -30,6 +30,10 @@ public class ReceiptService {
                             .id(receipt.getId())
                             .items(receipt.getItems())
                             .points(points)
+                            .purchaseTime(receipt.getPurchaseTime())
+                            .purchaseDate(receipt.getPurchaseDate())
+                            .retailer(receipt.getRetailer())
+                            .total(receipt.getTotal())
                             .build();
             Receipt savedReceipt = receiptRepository.save(toSave);
 
